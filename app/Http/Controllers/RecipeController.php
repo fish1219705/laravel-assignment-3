@@ -13,7 +13,9 @@ class RecipeController extends Controller
      */
     public function index()
     {
-        //
+        return view('recipes.index', [
+            'recipes' => Recipe:: all()
+        ]);
     }
 
     /**
@@ -21,7 +23,7 @@ class RecipeController extends Controller
      */
     public function create()
     {
-        //
+        return view('recipes.create');
     }
 
     /**
@@ -29,7 +31,24 @@ class RecipeController extends Controller
      */
     public function store(StoreRecipeRequest $request)
     {
-        //
+        // 建立食譜
+        $recipe = Recipe::create($request->only([
+            'recipe_name',
+            'instructions',
+            'prep_time',
+            'servings',
+            'photo'
+        ]));
+
+        // 建立每一個 ingredient
+        foreach ($request->input('ingredients', []) as $ingredientData) {
+            $recipe->ingredients()->create([
+                'ingredient_name' => $ingredientData['ingredient_name'],
+                'quantity' => $ingredientData['quantity'],
+            ]);
+        }
+
+        return redirect()->route('recipes.index');
     }
 
     /**
@@ -37,7 +56,11 @@ class RecipeController extends Controller
      */
     public function show(Recipe $recipe)
     {
-        //
+         // 獲取這個食譜的配料
+        $ingredients = $recipe->ingredients;
+
+        // 返回視圖，並傳遞食譜和配料數據
+        return view('recipes.show', compact('recipe', 'ingredients'));
     }
 
     /**
@@ -45,7 +68,7 @@ class RecipeController extends Controller
      */
     public function edit(Recipe $recipe)
     {
-        //
+        return view('recipes.edit', compact('recipe'));
     }
 
     /**
@@ -53,7 +76,10 @@ class RecipeController extends Controller
      */
     public function update(UpdateRecipeRequest $request, Recipe $recipe)
     {
-        //
+        // 更新食譜
+        $recipe->update($request -> validated());
+        return redirect()->route('recipes.show', $recipe->id);
+
     }
 
     /**
@@ -61,6 +87,12 @@ class RecipeController extends Controller
      */
     public function destroy(Recipe $recipe)
     {
-        //
+        // 刪除相關 ingredients
+        $recipe->ingredients()->delete();
+
+        // 刪除食譜
+        $recipe->delete();
+
+        return redirect()->route('recipes.index');
     }
 }
