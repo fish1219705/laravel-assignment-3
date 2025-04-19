@@ -1,9 +1,21 @@
-<form action="{{ route('recipes.store') }}" method="POST">
+<form action="{{ route('recipes.store') }}" method="POST" enctype="multipart/form-data">
     @csrf
+    
+    @if ($errors->any())
+    <div class="error-messages">
+        <ul>
+            @foreach ($errors->all() as $error)
+                <li style="color: red;">{{ $error }}</li>
+            @endforeach
+        </ul>
+    </div>
+    @endif
+
     <input type="text" name="recipe_name" placeholder="Recipe Name" required>
     <textarea name="instructions" placeholder="Instructions" required></textarea>
     <input type="number" name="prep_time" placeholder="Preparation Time">
     <input type="number" name="servings" placeholder="Servings">
+    <input type="file" name="photo" accept="image/*">
 
     <h4>Ingredients:</h4>
 
@@ -42,3 +54,8 @@ function removeIngredient(button) {
 }
 </script>
 
+<style>
+    .ingredient-group {
+        margin-bottom: 10px;
+    }
+</style>

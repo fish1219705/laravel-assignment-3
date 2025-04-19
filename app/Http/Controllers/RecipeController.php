@@ -31,14 +31,17 @@ class RecipeController extends Controller
      */
     public function store(StoreRecipeRequest $request)
     {
-        // 建立食譜
         $recipe = Recipe::create($request->only([
             'recipe_name',
             'instructions',
             'prep_time',
             'servings',
-            'photo'
         ]));
+
+        if ($request->hasFile('photo')) {
+            $path = $request->file('photo')->store('photos', 'public');
+            $recipe->update(['photo' => $path]);
+        }
 
         // 建立每一個 ingredient
         foreach ($request->input('ingredients', []) as $ingredientData) {
@@ -76,10 +79,27 @@ class RecipeController extends Controller
      */
     public function update(UpdateRecipeRequest $request, Recipe $recipe)
     {
-        // 更新食譜
-        $recipe->update($request -> validated());
+        $recipe->update($request->only([
+            'recipe_name',
+            'instructions',
+            'prep_time',
+            'servings',
+        ]));
+    
+        if ($request->hasFile('photo')) {
+            $path = $request->file('photo')->store('photos', 'public');
+            $recipe->update(['photo' => $path]);
+        }
+    
+        $recipe->ingredients()->delete();
+        foreach ($request->input('ingredients', []) as $ingredientData) {
+            $recipe->ingredients()->create([
+                'ingredient_name' => $ingredientData['ingredient_name'],
+                'quantity' => $ingredientData['quantity'],
+            ]);
+        }
+    
         return redirect()->route('recipes.show', $recipe->id);
-
     }
 
     /**

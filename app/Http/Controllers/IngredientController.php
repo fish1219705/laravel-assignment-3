@@ -61,6 +61,8 @@ class IngredientController extends Controller
      */
     public function destroy(Ingredient $ingredient)
     {
-        //
+        $recipe = $ingredient->recipe;
+        $ingredient->delete();
+        return redirect()->route('recipes.edit', $recipe->id)->with('success', 'Ingredient deleted');
     }
 }
