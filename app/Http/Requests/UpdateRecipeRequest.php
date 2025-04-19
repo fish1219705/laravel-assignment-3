@@ -11,7 +11,7 @@ class UpdateRecipeRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -22,7 +22,13 @@ class UpdateRecipeRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'recipe_name' => 'required|string|max:255', 
+            'instructions' => 'required|string', 
+            'prep_time' => 'nullable|integer', 
+            'servings' => 'nullable|integer', 
+            'photo' => 'nullable|string', 
+            'ingredients.*.ingredient_name' => 'required|string', 
+            'ingredients.*.quantity' => 'required|string', 
         ];
     }
 }

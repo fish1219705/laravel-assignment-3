@@ -26,7 +26,7 @@ class StoreRecipeRequest extends FormRequest
             'instructions' => 'required|string',
             'prep_time' => 'nullable|integer',
             'servings' => 'nullable|integer',
-            'photo' => 'nullable|string',
+            'photo' => 'nullable|image',
     
             // ingredients 是 array
             'ingredients' => 'required|array|min:1',

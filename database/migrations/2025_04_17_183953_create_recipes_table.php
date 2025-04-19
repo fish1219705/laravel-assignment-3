@@ -17,7 +17,7 @@ return new class extends Migration
             $table->text('instructions');
             $table->integer('prep_time');
             $table->integer('servings');
-            $table->string('photo');
+            $table->string('photo')->nullable();
             $table->timestamps();
     
         });

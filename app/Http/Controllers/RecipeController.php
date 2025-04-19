@@ -13,9 +13,8 @@ class RecipeController extends Controller
      */
     public function index()
     {
-        return view('recipes.index', [
-            'recipes' => Recipe:: all()
-        ]);
+        $recipes = Recipe::with('ingredients')->get(); // 把 ingredients 一起抓來
+        return view('recipes.index', compact('recipes'));
     }
 
     /**
@@ -31,17 +30,20 @@ class RecipeController extends Controller
      */
     public function store(StoreRecipeRequest $request)
     {
-        $recipe = Recipe::create($request->only([
+        $path = null;
+
+        if ($request->hasFile('photo')) {
+            $path = $request->file('photo')->store('photos', 'public');
+        }
+
+        $data = $request->only([
             'recipe_name',
             'instructions',
             'prep_time',
             'servings',
-        ]));
-
-        if ($request->hasFile('photo')) {
-            $path = $request->file('photo')->store('photos', 'public');
-            $recipe->update(['photo' => $path]);
-        }
+        ]);
+        $data['photo'] = $path;
+        $recipe = Recipe::create($data);
 
         // 建立每一個 ingredient
         foreach ($request->input('ingredients', []) as $ingredientData) {
@@ -51,7 +53,7 @@ class RecipeController extends Controller
             ]);
         }
 
-        return redirect()->route('recipes.index');
+        return redirect()->route('recipes.index')->with('success', 'Recipe created successfully!');
     }
 
     /**
@@ -78,29 +80,28 @@ class RecipeController extends Controller
      * Update the specified resource in storage.
      */
     public function update(UpdateRecipeRequest $request, Recipe $recipe)
-    {
-        $recipe->update($request->only([
-            'recipe_name',
-            'instructions',
-            'prep_time',
-            'servings',
-        ]));
-    
-        if ($request->hasFile('photo')) {
-            $path = $request->file('photo')->store('photos', 'public');
-            $recipe->update(['photo' => $path]);
-        }
-    
-        $recipe->ingredients()->delete();
-        foreach ($request->input('ingredients', []) as $ingredientData) {
-            $recipe->ingredients()->create([
-                'ingredient_name' => $ingredientData['ingredient_name'],
-                'quantity' => $ingredientData['quantity'],
-            ]);
-        }
-    
-        return redirect()->route('recipes.show', $recipe->id);
+{
+    // 更新食譜基本信息
+    $recipe->update($request->only([
+        'recipe_name',
+        'instructions',
+        'prep_time',
+        'servings',
+    ]));
+
+    // 更新食材（簡化版）
+    $recipe->ingredients()->delete(); // 刪除舊食材
+    foreach ($request->input('ingredients', []) as $ingredientData) {
+        $recipe->ingredients()->create([
+            'ingredient_name' => $ingredientData['ingredient_name'],
+            'quantity' => $ingredientData['quantity'],
+        ]);
     }
+
+    return redirect()->route('recipes.index', $recipe->id)
+                   ->with('success', 'Recipe updated successfully');
+}
+
 
     /**
      * Remove the specified resource from storage.
@@ -113,6 +114,6 @@ class RecipeController extends Controller
         // 刪除食譜
         $recipe->delete();
 
-        return redirect()->route('recipes.index');
+        return redirect()->route('recipes.index')->with('success', 'Recipe deleted successfully!');
     }
 }

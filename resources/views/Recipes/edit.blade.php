@@ -1,31 +1,44 @@
-<form action="{{ route('recipes.update', $recipe->id) }}" method="POST" enctype="multipart/form-data">
+@extends('layout')
+
+@section('content')
+<h1>Edit Recipe</h1>
+
+@if ($errors->any())
+    <ul>
+        @foreach ($errors->all() as $error)
+            <li>{{ $error }}</li>
+        @endforeach
+    </ul>
+@endif
+
+<form action="{{ route('recipes.update', $recipe->id) }}" method="POST">
     @csrf
     @method('PUT')
 
-    <input type="text" name="recipe_name" value="{{ $recipe->recipe_name }}" required>
-    <textarea name="instructions" required>{{ $recipe->instructions }}</textarea>
-    <input type="number" name="prep_time" value="{{ $recipe->prep_time }}">
-    <input type="number" name="servings" value="{{ $recipe->servings }}">
+    <!-- 基本資訊 -->
+    <input type="text" name="recipe_name" placeholder="Recipe Name" 
+           value="{{ old('recipe_name') ?? $recipe->recipe_name }}">
+    
+    <textarea name="instructions" placeholder="Instructions">{{ old('instructions') ?? $recipe->instructions }}</textarea>
+    
+    <input type="number" name="prep_time" placeholder="Preparation Time" 
+           value="{{ old('prep_time') ?? $recipe->prep_time }}">
+    
+    <input type="number" name="servings" placeholder="Servings" 
+           value="{{ old('servings') ?? $recipe->servings }}">
 
-    <p>Current Photo:</p>
-    @if($recipe->photo)
-        <img src="{{ asset('storage/' . $recipe->photo) }}" width="150">
-    @endif
-    <input type="file" name="photo" accept="image/*">
-
+    <!-- 簡化版食材列表 - 只顯示現有食材，不處理新增 -->
     <h4>Ingredients:</h4>
     @foreach($recipe->ingredients as $i => $ingredient)
-        <div class="ingredient-group">
-            <input type="text" name="ingredients[{{ $i }}][ingredient_name]" value="{{ $ingredient->ingredient_name }}" required>
-            <input type="text" name="ingredients[{{ $i }}][quantity]" value="{{ $ingredient->quantity }}" required>
+        <div>
+            <input type="text" name="ingredients[{{ $i }}][ingredient_name]" 
+                   value="{{ old("ingredients.$i.ingredient_name") ?? $ingredient->ingredient_name }}">
+            <input type="text" name="ingredients[{{ $i }}][quantity]" 
+                   value="{{ old("ingredients.$i.quantity") ?? $ingredient->quantity }}">
             <input type="hidden" name="ingredients[{{ $i }}][id]" value="{{ $ingredient->id }}">
-            <form action="{{ route('ingredients.destroy', $ingredient->id) }}" method="POST" style="display:inline">
-                @csrf
-                @method('DELETE')
-                <button type="submit">❌</button>
-            </form>
         </div>
     @endforeach
 
-    <button type="submit">Update Recipe</button>
+    <input type="submit" value="Update Recipe">
 </form>
+@endsection
