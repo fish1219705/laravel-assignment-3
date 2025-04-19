@@ -15,7 +15,7 @@
 
 <header>
 
-    <h1>My Recipe!</h1>
+    <h1>My Recipe</h1>
 
 </header>
 
@@ -29,6 +29,7 @@
 
     Footer Text | 
     Copyright {{date('Y')}}
+    
 
     <br>
 
