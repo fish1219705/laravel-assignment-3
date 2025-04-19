@@ -35,8 +35,32 @@ class DatabaseSeeder extends Seeder
             'recipe_name' => 'Salmon Fillet',
             'instructions' => 'Bake salmon with lemon and herbs.',
             'prep_time' => 30, // 分鐘
-            'servings' => 4,
+            'servings' => 3,
             'photo' => '', // 清空 photo 欄位
+        ]);
+
+        $recipe3 = Recipe::create([
+            'recipe_name' => 'Tiramisu',
+            'instructions' => 'Layer coffee-soaked cake with mascarpone cream.',
+            'prep_time' => 60,
+            'servings' => 4,
+            'photo' => '',
+        ]);
+
+        $recipe4 = Recipe::create([
+            'recipe_name' => 'Chicken Shawarma',
+            'instructions' => 'Grill marinated chicken with spices.',
+            'prep_time' => 50,
+            'servings' => 3,
+            'photo' => '',
+        ]);
+
+        $recipe5 = Recipe::create([
+            'recipe_name' => 'Pumpkin Pie',
+            'instructions' => 'Bake spiced pumpkin filling in pie crust.',
+            'prep_time' => 60,
+            'servings' => 6,
+            'photo' => '',
         ]);
 
         Ingredient::create([
@@ -68,6 +92,79 @@ class DatabaseSeeder extends Seeder
             'ingredient_name' => 'Herbs (e.g., parsley, dill)',
             'quantity' => 'To taste',
         ]);
+
+        Ingredient::create([
+            'recipe_id' => $recipe3->id,
+            'ingredient_name' => 'Mascarpone cheese',
+            'quantity' => '1 cup',
+        ]);
+
+        Ingredient::create([
+            'recipe_id' => $recipe3->id,
+            'ingredient_name' => 'Heavy cream',
+            'quantity' => '1 cup',
+        ]);
+
+        Ingredient::create([
+            'recipe_id' => $recipe3->id,
+            'ingredient_name' => 'Coffee',
+            'quantity' => '1 cup',
+        ]);
+
+        Ingredient::create([
+            'recipe_id' => $recipe3->id,
+            'ingredient_name' => 'Cocoa powder',
+            'quantity' => '2 tablespoons',
+        ]);
+
+        Ingredient::create([
+            'recipe_id' => $recipe4->id,
+            'ingredient_name' => 'Chicken',
+            'quantity' => '2 breasts',
+        ]);
+
+        Ingredient::create([
+            'recipe_id' => $recipe4->id,
+            'ingredient_name' => 'Olive oil',
+            'quantity' => '2 tablespoons',
+        ]);
+
+        Ingredient::create([
+            'recipe_id' => $recipe4->id,
+            'ingredient_name' => 'Garlic',
+            'quantity' => '2 cloves',
+        ]);
+
+        Ingredient::create([
+            'recipe_id' => $recipe4->id,
+            'ingredient_name' => 'Tomatoes',
+            'quantity' => '4',
+        ]);
+
+        Ingredient::create([
+            'recipe_id' => $recipe5->id,
+            'ingredient_name' => 'Pumpkin puree',
+            'quantity' => '2 cups',
+        ]);
+
+        Ingredient::create([
+            'recipe_id' => $recipe5->id,
+            'ingredient_name' => 'Sugar',
+            'quantity' => '1 cup',
+        ]);
+
+        Ingredient::create([
+            'recipe_id' => $recipe5->id,
+            'ingredient_name' => 'Cinnamon',
+            'quantity' => '1 teaspoon',
+        ]);
+
+        Ingredient::create([
+            'recipe_id' => $recipe5->id,
+            'ingredient_name' => 'Nutmeg',
+            'quantity' => '1/2 teaspoon',
+        ]);
+        
 
     }
 }
