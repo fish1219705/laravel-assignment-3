@@ -1,57 +1,41 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RecipeController;
-use App\Http\Controllers\IngredientController;
-use App\Http\Controllers\ConsoleController;
-use App\Http\Controllers\UsersController;
-
+use App\Http\Controllers\UserController;
+use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     return view('welcome');
-})->name('home');
-
-
-Route::middleware('guest')->group(function () {
-    Route::get('/console/login', [ConsoleController::class, 'loginForm'])->name('console.login.form');
-    Route::post('/console/login', [ConsoleController::class, 'login'])->name('console.login');
 });
+
+Route::get('/dashboard', function () {
+    return view('dashboard');
+})->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
+    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
-    Route::get('/console/dashboard', [ConsoleController::class, 'dashboard'])->name('console.dashboard');
-    Route::get('/console/logout', [ConsoleController::class, 'logout'])->name('console.logout');
-    
-
-    Route::prefix('/console/users')->name('console.users.')->group(function () {
-        Route::get('/list', [UsersController::class, 'list'])->name('list');
-        Route::get('/add', [UsersController::class, 'addForm'])->name('add.form');
-        Route::post('/add', [UsersController::class, 'add'])->name('add');
-        Route::get('/edit/{user:id}', [UsersController::class, 'editForm'])->name('edit.form')->where('user', '[0-9]+');
-        Route::post('/edit/{user:id}', [UsersController::class, 'edit'])->name('edit')->where('user', '[0-9]+');
-        Route::get('/delete/{user:id}', [UsersController::class, 'delete'])->name('delete')->where('user', '[0-9]+');
-    });
-    
-
-    Route::prefix('/console/recipes')->name('recipes.')->middleware('auth')->group(function () {
-
-        Route::get('/', [RecipeController::class, 'index'])->name('index'); 
-        Route::get('/create', [RecipeController::class, 'create'])->name('create'); 
-        Route::post('/', [RecipeController::class, 'store'])->name('store');  
-        Route::get('/{recipe}', [RecipeController::class, 'show'])->name('show');   
-        Route::get('/{recipe}/edit', [RecipeController::class, 'edit'])->name('edit'); 
-        Route::put('/{recipe}', [RecipeController::class, 'update'])->name('update');  
-        Route::delete('/{recipe}', [RecipeController::class, 'destroy'])->name('destroy'); 
-        
-        
-        Route::get('/{recipe}/image', [RecipeController::class, 'imageForm'])->name('image.form');
-        Route::post('/{recipe}/image', [RecipeController::class, 'image'])->name('image');
-    });
-
-
-    Route::delete('/console/ingredients/{ingredient}', [IngredientController::class, 'destroy'])
-        ->name('ingredients.destroy')
-        ->middleware('auth');
+    Route::get('/my-recipes', [RecipeController::class, 'myRecipes'])->name('recipes.my');
+    Route::get('/recipes/create', [RecipeController::class, 'create'])->name('recipes.create');
+    Route::post('/recipes', [RecipeController::class, 'store'])->name('recipes.store');
 
 });
 
+// Admin Route
+Route::middleware('admin')->group(function () {
+    
+    Route::get('/admin/recipes', [RecipeController::class, 'index'])->name('admin.recipes.index');
+    Route::get('/admin/recipes/create', [RecipeController::class, 'create'])->name('admin.recipes.create');
+    Route::get('/admin/recipes/{recipe}', [RecipeController::class, 'show'])->name('admin.recipes.show');
+    Route::get('/admin/recipes/{recipe}/edit', [RecipeController::class, 'edit'])->name('admin.recipes.edit');
+    Route::put('/admin/recipes/{recipe}', [RecipeController::class, 'update'])->name('admin.recipes.update');
+    Route::delete('/admin/recipes/{recipe}', [RecipeController::class, 'destroy'])->name('admin.recipes.destroy');
+
+    
+    Route::resource('admin/users', UserController::class)->names('admin.users');
+});
+
+require __DIR__.'/auth.php';
