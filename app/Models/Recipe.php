@@ -7,19 +7,19 @@ use Illuminate\Database\Eloquent\Model;
 
 class Recipe extends Model
 {
-    /** @use HasFactory<\Database\Factories\RecipeFactory> */
     use HasFactory;
+
     protected $fillable = [
-        'recipe_name',
-        'instructions',
-        'prep_time',
-        'servings',
-        'photo',
+        'user_id', 'recipe_name', 'instructions', 'prep_time', 'servings', 'photo', 
     ];
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
 
     public function ingredients()
     {
         return $this->hasMany(Ingredient::class);
     }
-
 }
