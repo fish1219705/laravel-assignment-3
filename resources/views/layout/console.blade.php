@@ -6,33 +6,30 @@
 
         <title>My Recipe</title>
 
-        <link rel="stylesheet" href="{{url('app.css')}}">
-
-        <script src="{{url('app.js')}}"></script>
+        <link rel="stylesheet" href="{{ asset('app.css') }}">
+        <script src="{{ asset('app.js') }}"></script>
         
     </head>
     <body>
 
         <header>
-
             <h1>Recipe Console</h1>
 
             @if (Auth::check())
-                You are logged in as {{auth()->user()->first}} {{auth()->user()->last}} |
-                <a href="/console/logout">Log Out</a> | 
-                <a href="/console/dashboard">Dashboard</a> | 
-                <a href="/">Website Home Page</a>
+                You are logged in as {{ auth()->user()->first }} {{ auth()->user()->last }} |
+                <a href="{{ route('console.logout') }}">Log Out</a> | 
+                <a href="{{ route('console.dashboard') }}">Dashboard</a> | 
+                <a href="{{ route('home') }}">Website Home Page</a>
             @else
-                <a href="/">Return to My Recipe</a>
+                <a href="{{ route('home') }}">Return to My Recipe</a>
             @endif
-
         </header>
 
         <hr>
 
         @if (session()->has('message'))
-            <div>
-                <div>{{session()->get('message')}}</div>
+            <div class="flash-message">
+                <div>{{ session()->get('message') }}</div>
             </div>
         @endif
 

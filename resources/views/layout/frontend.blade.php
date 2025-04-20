@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <title>My Recipe | {{$title}}    </title>
+    <title>My Recipe </title>
 
     <link rel="stylesheet" href="{{url('app.css')}}">
 
