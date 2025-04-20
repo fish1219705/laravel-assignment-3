@@ -19,7 +19,7 @@
                         <thead>
                             <tr>
                                 <th>Recipe Name</th>
-                                <th>Provided User</th>
+                                <th>User</th>
                                 <th>Prepare Time</th>
                                 <th>Servings</th>
                                 <th>Operation</th>
