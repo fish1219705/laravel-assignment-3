@@ -35,13 +35,13 @@ Route::middleware('auth')->group(function () {
 
     Route::prefix('/console/recipes')->name('recipes.')->middleware('auth')->group(function () {
 
-        Route::get('/', [RecipeController::class, 'index'])->name('index');          // 列表
-        Route::get('/create', [RecipeController::class, 'create'])->name('create'); // 新增表单
-        Route::post('/', [RecipeController::class, 'store'])->name('store');        // 新增提交
+        Route::get('/', [RecipeController::class, 'index'])->name('index'); 
+        Route::get('/create', [RecipeController::class, 'create'])->name('create'); 
+        Route::post('/', [RecipeController::class, 'store'])->name('store');  
         Route::get('/{recipe}', [RecipeController::class, 'show'])->name('show');   
-        Route::get('/{recipe}/edit', [RecipeController::class, 'edit'])->name('edit'); // 编辑表单
-        Route::put('/{recipe}', [RecipeController::class, 'update'])->name('update');  // 编辑提交
-        Route::delete('/{recipe}', [RecipeController::class, 'destroy'])->name('destroy'); // 删除
+        Route::get('/{recipe}/edit', [RecipeController::class, 'edit'])->name('edit'); 
+        Route::put('/{recipe}', [RecipeController::class, 'update'])->name('update');  
+        Route::delete('/{recipe}', [RecipeController::class, 'destroy'])->name('destroy'); 
         
         
         Route::get('/{recipe}/image', [RecipeController::class, 'imageForm'])->name('image.form');
@@ -52,5 +52,6 @@ Route::middleware('auth')->group(function () {
     Route::delete('/console/ingredients/{ingredient}', [IngredientController::class, 'destroy'])
         ->name('ingredients.destroy')
         ->middleware('auth');
+
 });
 
