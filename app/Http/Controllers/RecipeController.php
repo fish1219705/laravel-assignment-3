@@ -45,7 +45,6 @@ class RecipeController extends Controller
         $data['photo'] = $path;
         $recipe = Recipe::create($data);
 
-        // 建立每一個 ingredient
         foreach ($request->input('ingredients', []) as $ingredientData) {
             $recipe->ingredients()->create([
                 'ingredient_name' => $ingredientData['ingredient_name'],
@@ -61,10 +60,9 @@ class RecipeController extends Controller
      */
     public function show(Recipe $recipe)
     {
-         // 獲取這個食譜的配料
+
         $ingredients = $recipe->ingredients;
 
-        // 返回視圖，並傳遞食譜和配料數據
         return view('recipes.show', compact('recipe', 'ingredients'));
     }
 
@@ -80,27 +78,26 @@ class RecipeController extends Controller
      * Update the specified resource in storage.
      */
     public function update(UpdateRecipeRequest $request, Recipe $recipe)
-{
-    // 更新食譜基本信息
-    $recipe->update($request->only([
-        'recipe_name',
-        'instructions',
-        'prep_time',
-        'servings',
-    ]));
+    {
+        $recipe->update($request->only([
+            'recipe_name',
+            'instructions',
+            'prep_time',
+            'servings',
+        ]));
 
-    // 更新食材（簡化版）
-    $recipe->ingredients()->delete(); // 刪除舊食材
-    foreach ($request->input('ingredients', []) as $ingredientData) {
-        $recipe->ingredients()->create([
-            'ingredient_name' => $ingredientData['ingredient_name'],
-            'quantity' => $ingredientData['quantity'],
-        ]);
+        
+        $recipe->ingredients()->delete(); 
+        foreach ($request->input('ingredients', []) as $ingredientData) {
+            $recipe->ingredients()->create([
+                'ingredient_name' => $ingredientData['ingredient_name'],
+                'quantity' => $ingredientData['quantity'],
+            ]);
+        }
+
+        return redirect()->route('recipes.index', $recipe->id)
+                    ->with('success', 'Recipe updated successfully');
     }
-
-    return redirect()->route('recipes.index', $recipe->id)
-                   ->with('success', 'Recipe updated successfully');
-}
 
 
     /**
@@ -108,10 +105,9 @@ class RecipeController extends Controller
      */
     public function destroy(Recipe $recipe)
     {
-        // 刪除相關 ingredients
+    
         $recipe->ingredients()->delete();
 
-        // 刪除食譜
         $recipe->delete();
 
         return redirect()->route('recipes.index')->with('success', 'Recipe deleted successfully!');
