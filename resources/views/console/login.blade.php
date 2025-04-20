@@ -4,7 +4,7 @@
 
 <section>
 
-    <form method="post" action="/console/login" novalidate>
+    <form method="post" action="{{ route('console.login') }}" novalidate>
 
         @csrf
 
