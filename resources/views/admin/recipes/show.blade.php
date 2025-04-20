@@ -10,7 +10,7 @@
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 text-gray-900">
                     <h3 class="text-lg font-semibold">{{ $recipe->recipe_name }}</h3>
-                    <p>User Provided:{{ $recipe->user->name }} (ID: {{ $recipe->user_id }})</p>
+                    <p>User:{{ $recipe->user->name }} (ID: {{ $recipe->user_id }})</p>
                     <p>Prepare time: {{ $recipe->prep_time }} minutes</p>
                     <p>Servings: {{ $recipe->servings }} people</p>
                     <p>Instruction: {{ $recipe->instructions }}</p>
