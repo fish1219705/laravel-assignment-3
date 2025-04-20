@@ -1,19 +1,41 @@
-@extends('layouts.app')
+<x-app-layout>
+    <x-slot name="header">
+        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
+            Recipe Detail
+        </h2>
+    </x-slot>
 
-@section('content')
-<div class="container">
-    <h1>{{ $recipe->recipe_name }}</h1>
-    <p>{{ $recipe->instructions }}</p>
-    <p><strong>Prep Time:</strong> {{ $recipe->prep_time ?? 'N/A' }} minutes</p>
-    <p><strong>Servings:</strong> {{ $recipe->servings ?? 'N/A' }}</p>
-    @if($recipe->photo)
-        <img src="{{ asset('storage/' . $recipe->photo) }}" width="200" alt="Photo of {{ $recipe->recipe_name }}">
-    @endif
-    <h3>Ingredients:</h3>
-    <ul>
-        @foreach($recipe->ingredients as $ingredient)
-            <li>{{ $ingredient->ingredient_name }} - {{ $ingredient->quantity }}</li>
-        @endforeach
-    </ul>
-</div>
-@endsection
+    <div class="py-12">
+        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
+                <div class="p-6 text-gray-900">
+                    <h3 class="text-lg font-semibold">{{ $recipe->recipe_name }}</h3>
+                    <p>User Provided:{{ $recipe->user->name }} (ID: {{ $recipe->user_id }})</p>
+                    <p>Prepare time: {{ $recipe->prep_time }} minutes</p>
+                    <p>Servings: {{ $recipe->servings }} people</p>
+                    <p>Instruction: {{ $recipe->instructions }}</p>
+
+                    @if ($recipe->photo)
+                        <img src="{{ asset('storage/' . $recipe->photo) }}" alt="recipe photo" class="my-4 max-w-xs">
+                    @endif
+
+                    <h4 class="mt-4 font-semibold">Ingredient</h4>
+                    <ul>
+                        @foreach ($recipe->ingredients as $ingredient)
+                            <li>{{ $ingredient->ingredient_name }} - {{ $ingredient->quantity }}</li>
+                        @endforeach
+                    </ul>
+
+                    <div class="mt-4">
+                        <a href="{{ route('admin.recipes.edit', $recipe) }}" class="text-yellow-500">edit</a>
+                        <form action="{{ route('admin.recipes.destroy', $recipe) }}" method="POST" class="inline">
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit" class="text-red-500" onclick="return confirm('confirm delete?')">delete</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</x-app-layout>

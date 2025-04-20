@@ -2,17 +2,15 @@
 
 namespace App\Models;
 
-use Illuminate\Contracts\Auth\MustVerifyEmail;
+// use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
-use Illuminate\Support\Facades\Crypt;
-use Laravel\Sanctum\HasApiTokens;
 
 class User extends Authenticatable
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
-    use HasApiTokens, HasFactory, Notifiable;
+    use HasFactory, Notifiable;
 
     /**
      * The attributes that are mass assignable.
@@ -20,11 +18,10 @@ class User extends Authenticatable
      * @var list<string>
      */
     protected $fillable = [
-        'first',
-        'last',
+        'name',
         'email',
         'password',
-        'role',
+        'is_admin', //
     ];
 
     /**
@@ -38,31 +35,20 @@ class User extends Authenticatable
     ];
 
     /**
-     * The attributes that should be cast.
+     * Get the attributes that should be cast.
      *
-     * @var array<string, string>
+     * @return array<string, string>
      */
-    protected $casts = [
-        'email_verified_at' => 'datetime',
-    ];
-
-    public function setPasswordAttribute($value)
+    protected function casts(): array
     {
-        $this->attributes['password'] = bcrypt($value);
+        return [
+            'email_verified_at' => 'datetime',
+            'password' => 'hashed',
+            'is_admin' => 'boolean',
+        ];
     }
-
     public function recipes()
     {
         return $this->hasMany(Recipe::class);
     }
-
-    public function isAdmin()
-    {
-        return $this->role === 'admin';
-    }
-
-    public function hasRole($role)
-{
-    return $this->role === $role; // 确保你的 users 表有 role 字段
-}
 }

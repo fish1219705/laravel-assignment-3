@@ -1,38 +1,33 @@
-@extends('layouts.app')
+<x-app-layout>
+    <x-slot name="header">
+        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
+            {{ __('Dashboard') }}
+        </h2>
+    </x-slot>
 
-@section('content')
-<div class="container">
-    <h1>User Dashboard</h1>
+    <div class="py-12">
+        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
+                <div class="p-6 text-gray-900">
+                    {{ __("You're logged in!") }}
 
-    @if(session('success'))
-        <div class="alert alert-success">
-            {{ session('success') }}
-        </div>
-    @endif
+                    <br><br>
 
-    <a href="{{ route('recipes.submit') }}" class="btn btn-primary mb-3">Submit a New Recipe</a>
+                    <a href="{{ route('recipes.my') }}" class="mt-4 inline-block bg-blue-500 text-white px-4 py-2 rounded">
+                        See my recipes
+                    </a>
 
-    <h2>Your Recipes</h2>
-    @if($userRecipes->isEmpty())
-        <p>You haven't submitted any recipes yet.</p>
-    @else
-        <div style="display: flex; flex-wrap: wrap; gap: 20px; margin-top: 20px;">
-            @foreach($userRecipes as $recipe)
-                <div style="border: 1px solid #ccc; padding: 15px; width: 300px; border-radius: 10px;">
-                    <h3>{{ $recipe->recipe_name }}</h3>
-                    <p><strong>Approved:</strong> {{ $recipe->approved ? 'Yes' : 'No' }}</p>
-                    <p><strong>Prep Time:</strong> {{ $recipe->prep_time ?? 'N/A' }} minutes</p>
-                    <p><strong>Servings:</strong> {{ $recipe->servings ?? 'N/A' }}</p>
-                    @if($recipe->approved)
-                        <a href="{{ route('recipes.show', $recipe->id) }}" class="btn btn-info btn-sm">View Details</a>
+                    @if (auth()->user()->is_admin)
+                        <a href="{{ route('admin.recipes.index') }}" class="mt-4 inline-block bg-green-500 text-white px-4 py-2 rounded">
+                            Manage recipes
+                        </a>
+                        <a href="{{ route('admin.users.index') }}" class="mt-4 inline-block bg-purple-500 text-white px-4 py-2 rounded">
+                            Manage Users
+                        </a>
                     @endif
-                </div>
-            @endforeach
-        </div>
 
-        <div class="mt-3">
-            {{ $userRecipes->links() }}
+                </div>
+            </div>
         </div>
-    @endif
-</div>
-@endsection
+    </div>
+</x-app-layout>

@@ -3,9 +3,8 @@
 namespace Database\Seeders;
 
 use App\Models\User;
-use App\Models\Recipe; 
+use App\Models\Recipe;
 use App\Models\Ingredient;
-// use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -15,17 +14,17 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // User::factory(10)->create();
-        User::truncate();
+      
+        $user = User::factory()->create([
+            'id' => 1, 
+            'name' => 'Test User',
+            'email' => 'test@example.com',
+            'is_admin' => 1, 
+        ]);
 
-        // User::factory()->create([
-        //     'name' => 'Test User',
-        //     'email' => 'test@example.com',
-        // ]);
-
-        User::factory()->count(2)->create();
-
+   
         $recipe1 = Recipe::create([
+            'user_id' => $user->id,
             'recipe_name' => 'Samosas',
             'instructions' => 'Fill dough with spiced potatoes and fry.',
             'prep_time' => 60,
@@ -33,16 +32,17 @@ class DatabaseSeeder extends Seeder
             'photo' => '',
         ]);
 
-        
         $recipe2 = Recipe::create([
+            'user_id' => $user->id,
             'recipe_name' => 'Salmon Fillet',
             'instructions' => 'Bake salmon with lemon and herbs.',
-            'prep_time' => 30, // 分鐘
+            'prep_time' => 30,
             'servings' => 3,
-            'photo' => '', // 清空 photo 欄位
+            'photo' => '',
         ]);
 
         $recipe3 = Recipe::create([
+            'user_id' => $user->id,
             'recipe_name' => 'Tiramisu',
             'instructions' => 'Layer coffee-soaked cake with mascarpone cream.',
             'prep_time' => 60,
@@ -51,6 +51,7 @@ class DatabaseSeeder extends Seeder
         ]);
 
         $recipe4 = Recipe::create([
+            'user_id' => $user->id,
             'recipe_name' => 'Chicken Shawarma',
             'instructions' => 'Grill marinated chicken with spices.',
             'prep_time' => 50,
@@ -59,6 +60,7 @@ class DatabaseSeeder extends Seeder
         ]);
 
         $recipe5 = Recipe::create([
+            'user_id' => $user->id,
             'recipe_name' => 'Pumpkin Pie',
             'instructions' => 'Bake spiced pumpkin filling in pie crust.',
             'prep_time' => 60,
@@ -66,6 +68,7 @@ class DatabaseSeeder extends Seeder
             'photo' => '',
         ]);
 
+  
         Ingredient::create([
             'recipe_id' => $recipe1->id,
             'ingredient_name' => 'Potatoes',
@@ -167,7 +170,5 @@ class DatabaseSeeder extends Seeder
             'ingredient_name' => 'Nutmeg',
             'quantity' => '1/2 teaspoon',
         ]);
-        
-
     }
 }

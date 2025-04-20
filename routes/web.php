@@ -1,68 +1,41 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\AuthController;
+use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RecipeController;
-use App\Http\Controllers\IngredientController;
 use App\Http\Controllers\UserController;
-use App\Http\Controllers\AdminController;
+use Illuminate\Support\Facades\Route;
 
-// 公共路由
 Route::get('/', function () {
     return view('welcome');
-})->name('home');
-
-// 認證路由
-Route::middleware('guest')->group(function () {
-    Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
-    Route::post('/login', [AuthController::class, 'login']);
-    Route::get('/register', [AuthController::class, 'showRegistrationForm'])->name('register');
-    Route::post('/register', [AuthController::class, 'register']);
 });
 
-// 登錄用戶基礎路由
+Route::get('/dashboard', function () {
+    return view('dashboard');
+})->middleware(['auth', 'verified'])->name('dashboard');
+
 Route::middleware('auth')->group(function () {
-    Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
-    // 普通用戶路由
-  
-        Route::get('/dashboard', [UserController::class, 'dashboard'])->name('dashboard');
-        Route::get('/recipes', [RecipeController::class, 'index'])->name('recipes.index'); // 新增
-        Route::get('/recipes/submit', [RecipeController::class, 'create'])->name('recipes.submit');
-        Route::post('/recipes', [RecipeController::class, 'store'])->name('recipes.store');
-        Route::get('/recipes/{recipe}', [RecipeController::class, 'show'])->name('recipes.show'); // 可選，查看單一食譜詳情
-    });
+    Route::get('/my-recipes', [RecipeController::class, 'myRecipes'])->name('recipes.my');
+    Route::get('/recipes/create', [RecipeController::class, 'create'])->name('recipes.create');
+    Route::post('/recipes', [RecipeController::class, 'store'])->name('recipes.store');
 
-    // 管理員路由
-    Route::middleware(['auth', 'admin'])->prefix('admin')->group(function () {
-        Route::get('/dashboard', [AdminController::class, 'dashboard'])->name('admin.dashboard');
+});
 
-        // 用戶管理
-        Route::prefix('/users')->name('users.')->group(function () {
-            Route::get('/', [AdminController::class, 'userIndex'])->name('index');
-            Route::get('/create', [AdminController::class, 'userCreate'])->name('create');
-            Route::post('/', [AdminController::class, 'userStore'])->name('store');
-            Route::get('/{user}/edit', [AdminController::class, 'userEdit'])->name('edit');
-            Route::put('/{user}', [AdminController::class, 'userUpdate'])->name('update');
-            Route::delete('/{user}', [AdminController::class, 'userDestroy'])->name('destroy');
-        });
+// Admin Route
+Route::middleware('admin')->group(function () {
+    
+    Route::get('/admin/recipes', [RecipeController::class, 'index'])->name('admin.recipes.index');
+    Route::get('/admin/recipes/create', [RecipeController::class, 'create'])->name('admin.recipes.create');
+    Route::get('/admin/recipes/{recipe}', [RecipeController::class, 'show'])->name('admin.recipes.show');
+    Route::get('/admin/recipes/{recipe}/edit', [RecipeController::class, 'edit'])->name('admin.recipes.edit');
+    Route::put('/admin/recipes/{recipe}', [RecipeController::class, 'update'])->name('admin.recipes.update');
+    Route::delete('/admin/recipes/{recipe}', [RecipeController::class, 'destroy'])->name('admin.recipes.destroy');
 
-        // 食譜管理
-        Route::prefix('/recipes')->name('recipes.')->group(function () {
-            Route::get('/', [RecipeController::class, 'index'])->name('index');
-            Route::get('/create', [RecipeController::class, 'create'])->name('create');
-            Route::post('/', [RecipeController::class, 'store'])->name('store');
-            Route::get('/{recipe}', [RecipeController::class, 'show'])->name('show');
-            Route::get('/{recipe}/edit', [RecipeController::class, 'edit'])->name('edit');
-            Route::put('/{recipe}', [RecipeController::class, 'update'])->name('update');
-            Route::delete('/{recipe}', [RecipeController::class, 'destroy'])->name('destroy');
-            Route::get('/{recipe}/approve', [RecipeController::class, 'approve'])->name('approve');
-            Route::get('/{recipe}/image', [RecipeController::class, 'imageForm'])->name('image.form');
-            Route::post('/{recipe}/image', [RecipeController::class, 'image'])->name('image');
-        });
+    
+    Route::resource('admin/users', UserController::class)->names('admin.users');
+});
 
-        // 食材管理
-        Route::delete('/ingredients/{ingredient}', [IngredientController::class, 'destroy'])->name('ingredients.destroy');
-    });
-
-
+require __DIR__.'/auth.php';
