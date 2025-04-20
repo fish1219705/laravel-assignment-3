@@ -14,11 +14,12 @@ class Recipe extends Model
         'instructions',
         'prep_time',
         'servings',
-        'photo'
+        'photo',
     ];
 
     public function ingredients()
     {
         return $this->hasMany(Ingredient::class);
     }
+
 }

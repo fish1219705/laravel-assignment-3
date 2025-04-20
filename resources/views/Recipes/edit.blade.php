@@ -15,7 +15,6 @@
     @csrf
     @method('PUT')
 
-    <!-- 基本資訊 -->
     <input type="text" name="recipe_name" placeholder="Recipe Name" 
            value="{{ old('recipe_name') ?? $recipe->recipe_name }}">
     
@@ -27,7 +26,6 @@
     <input type="number" name="servings" placeholder="Servings" 
            value="{{ old('servings') ?? $recipe->servings }}">
 
-    <!-- 簡化版食材列表 - 只顯示現有食材，不處理新增 -->
     <h4>Ingredients:</h4>
     @foreach($recipe->ingredients as $i => $ingredient)
         <div>

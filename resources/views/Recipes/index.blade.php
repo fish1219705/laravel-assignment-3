@@ -9,7 +9,7 @@
 @section('content')
     <h1>All Recipes</h1>
 
-    <a href="{{ route('recipes.create') }}">➕ Add New Recipe</a>
+    <a href="{{ route('recipes.create') }}">  Add New Recipe</a>
 
     <div style="display: flex; flex-wrap: wrap; gap: 20px; margin-top: 20px;">
         @foreach ($recipes as $recipe)
@@ -23,12 +23,12 @@
                 <p><strong>Prep Time:</strong> {{ $recipe->prep_time }} minutes</p>
                 <p><strong>Servings:</strong> {{ $recipe->servings }}</p>
 
-                <a href="{{ route('recipes.show', $recipe->id) }}">👀 View</a> |
-                <a href="{{ route('recipes.edit', $recipe->id) }}">✏️ Edit</a> |
+                <a href="{{ route('recipes.show', $recipe->id) }}"> View</a> |
+                <a href="{{ route('recipes.edit', $recipe->id) }}"> Edit</a> |
                 <form action="{{ route('recipes.destroy', $recipe->id) }}" method="POST" style="display: inline;">
                     @csrf
                     @method('DELETE')
-                    <button type="submit" onclick="return confirm('Are you sure?')">❌ Delete</button>
+                    <button type="submit" onclick="return confirm('Are you sure?')"> Delete</button>
                 </form>
             </div>
         @endforeach
