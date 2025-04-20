@@ -2,7 +2,7 @@
 
 @section('content')
 <div class="container">
-    <h2>Submit a New Recipe</h2>
+    <h1>Edit Recipe</h1>
 
     @if ($errors->any())
         <div class="alert alert-danger">
@@ -14,57 +14,56 @@
         </div>
     @endif
 
-    <form action="{{ route('recipes.store') }}" method="POST" enctype="multipart/form-data">
+    <form action="{{ route('recipes.update', $recipe->id) }}" method="POST">
         @csrf
+        @method('PUT')
 
         <div class="form-group mb-3">
             <label for="recipe_name">Recipe Name:</label>
             <input type="text" name="recipe_name" id="recipe_name" class="form-control" 
-                   placeholder="Recipe Name" value="{{ old('recipe_name') }}" required>
+                   value="{{ old('recipe_name', $recipe->recipe_name) }}" required>
         </div>
 
         <div class="form-group mb-3">
             <label for="instructions">Instructions:</label>
-            <textarea name="instructions" id="instructions" class="form-control" 
-                      placeholder="Instructions" required>{{ old('instructions') }}</textarea>
+            <textarea name="instructions" id="instructions" class="form-control" required>{{ old('instructions', $recipe->instructions) }}</textarea>
         </div>
 
         <div class="form-group mb-3">
             <label for="prep_time">Preparation Time (minutes):</label>
             <input type="number" name="prep_time" id="prep_time" class="form-control" 
-                   placeholder="Preparation Time" value="{{ old('prep_time') }}">
+                   value="{{ old('prep_time', $recipe->prep_time) }}">
         </div>
 
         <div class="form-group mb-3">
             <label for="servings">Servings:</label>
             <input type="number" name="servings" id="servings" class="form-control" 
-                   placeholder="Servings" value="{{ old('servings') }}">
-        </div>
-
-        <div class="form-group mb-3">
-            <label for="photo">Photo:</label>
-            <input type="file" name="photo" id="photo" class="form-control" accept="image/*">
+                   value="{{ old('servings', $recipe->servings) }}">
         </div>
 
         <h4>Ingredients:</h4>
         <div id="ingredients-wrapper">
-            <div class="ingredient-group">
-                <input type="text" name="ingredients[0][ingredient_name]" class="form-control" 
-                       placeholder="Ingredient Name" required>
-                <input type="text" name="ingredients[0][quantity]" class="form-control" 
-                       placeholder="Quantity" required>
-                <button type="button" class="remove-ingredient btn btn-danger btn-sm" onclick="removeIngredient(this)">❌</button>
-            </div>
+            @foreach($recipe->ingredients as $i => $ingredient)
+                <div class="ingredient-group">
+                    <input type="text" name="ingredients[{{ $i }}][ingredient_name]" 
+                           class="form-control" placeholder="Ingredient Name" 
+                           value="{{ old("ingredients.$i.ingredient_name", $ingredient->ingredient_name) }}" required>
+                    <input type="text" name="ingredients[{{ $i }}][quantity]" 
+                           class="form-control" placeholder="Quantity" 
+                           value="{{ old("ingredients.$i.quantity", $ingredient->quantity) }}" required>
+                    <button type="button" class="remove-ingredient btn btn-danger btn-sm" onclick="removeIngredient(this)">❌</button>
+                </div>
+            @endforeach
         </div>
 
         <button type="button" class="btn btn-secondary mt-3" onclick="addIngredient()">Add Another Ingredient</button>
 
-        <button type="submit" class="btn btn-primary mt-3">Submit</button>
+        <button type="submit" class="btn btn-primary mt-3">Update Recipe</button>
     </form>
 </div>
 
 <script>
-let count = 1;
+let count = {{ count($recipe->ingredients) }};
 
 function addIngredient() {
     const wrapper = document.getElementById('ingredients-wrapper');

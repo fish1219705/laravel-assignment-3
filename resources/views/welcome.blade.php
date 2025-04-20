@@ -1,3 +1,8 @@
+@if(session('success'))
+    <div class="alert alert-success">
+        {{ session('success') }}
+    </div>
+@endif
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 <head>
@@ -30,12 +35,18 @@
 
     @if (Auth::check())
         You are logged in as {{ auth()->user()->first }} {{ auth()->user()->last }} | 
-        <a href="{{ route('console.logout') }}">Log Out</a> | 
-        <a href="{{ route('console.dashboard') }}">Dashboard</a>
+        <a href="{{ route('logout') }}">Log Out</a> | 
+        @if (auth()->user()->hasRole('admin'))
+            <a href="{{ route('admin.dashboard') }}">Admin Dashboard</a>
+        @else
+            <a href="{{ route('dashboard') }}">User Dashboard</a>
+        @endif
     @else
-        <a href="{{ route('console.login.form') }}">Login</a>
+        <a href="{{ route('login') }}">Login</a> |
+        <a href="{{ route('register') }}">Register</a>
     @endif
 </footer>
 
 </body>
 </html>
+

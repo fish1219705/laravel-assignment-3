@@ -1,15 +1,16 @@
-@if(session('success'))
-    <div class="alert alert-success">
-        {{ session('success') }}
-    </div>
-@endif
-
-@extends('layout')
+@extends('layouts.app')
 
 @section('content')
+<div class="container">
     <h1>All Recipes</h1>
 
-    <a href="{{ route('recipes.create') }}">  Add New Recipe</a>
+    @if(session('success'))
+        <div class="alert alert-success">
+            {{ session('success') }}
+        </div>
+    @endif
+
+    <a href="{{ route('recipes.submit') }}" class="btn btn-primary mb-3">Submit New Recipe</a>
 
     <div style="display: flex; flex-wrap: wrap; gap: 20px; margin-top: 20px;">
         @foreach ($recipes as $recipe)
@@ -20,19 +21,16 @@
                     <img src="{{ asset('storage/' . $recipe->photo) }}" width="100%" alt="Photo of {{ $recipe->recipe_name }}">
                 @endif
 
-                <p><strong>Prep Time:</strong> {{ $recipe->prep_time }} minutes</p>
-                <p><strong>Servings:</strong> {{ $recipe->servings }}</p>
+                <p><strong>Prep Time:</strong> {{ $recipe->prep_time ?? 'N/A' }} minutes</p>
+                <p><strong>Servings:</strong> {{ $recipe->servings ?? 'N/A' }}</p>
 
-                <a href="{{ route('recipes.show', $recipe->id) }}"> View</a> |
-                <a href="{{ route('recipes.edit', $recipe->id) }}"> Edit</a> |
-                <form action="{{ route('recipes.destroy', $recipe->id) }}" method="POST" style="display: inline;">
-                    @csrf
-                    @method('DELETE')
-                    <button type="submit" onclick="return confirm('Are you sure?')"> Delete</button>
-                </form>
+                <a href="{{ route('recipes.show', $recipe->id) }}" class="btn btn-info btn-sm">View Details</a>
             </div>
         @endforeach
     </div>
+
+    <div class="mt-3">
+        {{ $recipes->links() }}
+    </div>
+</div>
 @endsection
-
-

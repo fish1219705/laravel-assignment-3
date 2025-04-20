@@ -15,6 +15,8 @@ class Recipe extends Model
         'prep_time',
         'servings',
         'photo',
+        'user_id',
+        'approved',
     ];
 
     public function ingredients()

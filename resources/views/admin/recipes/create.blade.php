@@ -2,7 +2,7 @@
 
 @section('content')
 <div class="container">
-    <h2>Submit a New Recipe</h2>
+    <h2>Create a New Recipe</h2>
 
     @if ($errors->any())
         <div class="alert alert-danger">
@@ -59,7 +59,7 @@
 
         <button type="button" class="btn btn-secondary mt-3" onclick="addIngredient()">Add Another Ingredient</button>
 
-        <button type="submit" class="btn btn-primary mt-3">Submit</button>
+        <button type="submit" class="btn btn-primary mt-3">Create Recipe</button>
     </form>
 </div>
 

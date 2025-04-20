@@ -24,6 +24,7 @@ class User extends Authenticatable
         'last',
         'email',
         'password',
+        'role',
     ];
 
     /**
@@ -54,4 +55,14 @@ class User extends Authenticatable
     {
         return $this->hasMany(Recipe::class);
     }
+
+    public function isAdmin()
+    {
+        return $this->role === 'admin';
+    }
+
+    public function hasRole($role)
+{
+    return $this->role === $role; // 确保你的 users 表有 role 字段
+}
 }
