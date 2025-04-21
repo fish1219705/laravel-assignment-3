@@ -34,11 +34,16 @@
                                     <td>{{ $recipe->servings }} people</td>
                                     <td>
                                         <a href="{{ route('admin.recipes.show', $recipe) }}" class="text-blue-500">view</a>
-                                        <a href="{{ route('admin.recipes.edit', $recipe) }}" class="text-yellow-500">edit</a>
-                                        <form action="{{ route('admin.recipes.destroy', $recipe) }}" method="POST" class="inline">
+                                        <a href="{{ route('admin.recipes.edit', $recipe) }}"
+                                            class="text-yellow-500">edit</a>
+                                        <a href="{{ route('recipes.show', $recipe) }}" class="text-green-500"
+                                            target="_blank">frontend</a>
+                                        <form action="{{ route('admin.recipes.destroy', $recipe) }}" method="POST"
+                                            class="inline">
                                             @csrf
                                             @method('DELETE')
-                                            <button type="submit" class="text-red-500" onclick="return confirm('Confirm Delete?')">delete</button>
+                                            <button type="submit" class="text-red-500"
+                                                onclick="return confirm('Confirm Delete?')">delete</button>
                                         </form>
                                     </td>
                                 </tr>

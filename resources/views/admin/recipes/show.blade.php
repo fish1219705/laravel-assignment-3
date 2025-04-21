@@ -28,10 +28,13 @@
 
                     <div class="mt-4">
                         <a href="{{ route('admin.recipes.edit', $recipe) }}" class="text-yellow-500">edit</a>
+                        <a href="{{ route('recipes.show', $recipe) }}" class="text-blue-500 ml-3" target="_blank">view
+                            on frontend</a>
                         <form action="{{ route('admin.recipes.destroy', $recipe) }}" method="POST" class="inline">
                             @csrf
                             @method('DELETE')
-                            <button type="submit" class="text-red-500" onclick="return confirm('confirm delete?')">delete</button>
+                            <button type="submit" class="text-red-500"
+                                onclick="return confirm('confirm delete?')">delete</button>
                         </form>
                     </div>
                 </div>
