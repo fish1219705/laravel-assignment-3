@@ -1,8 +1,14 @@
 <x-app-layout>
     <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            All Recipes
-        </h2>
+        <div class="flex justify-between items-center">
+            <h2 class="font-semibold text-xl text-gray-800 leading-tight">
+                All Recipes
+            </h2>
+            <a href="{{ route('admin.recipes.create') }}"
+                class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                Add New Recipe
+            </a>
+        </div>
     </x-slot>
 
     <div class="py-12">
@@ -15,35 +21,37 @@
                         </div>
                     @endif
 
-                    <table class="w-full mt-4">
+                    <table class="min-w-full bg-white border border-gray-300 mt-4">
                         <thead>
-                            <tr>
-                                <th>Recipe Name</th>
-                                <th>User</th>
-                                <th>Prepare Time</th>
-                                <th>Servings</th>
-                                <th>Operation</th>
+                            <tr class="bg-gray-100">
+                                <th class="py-2 px-4 border-b border-gray-300 text-left">Recipe Name</th>
+                                <th class="py-2 px-4 border-b border-gray-300 text-left">User</th>
+                                <th class="py-2 px-4 border-b border-gray-300 text-left">Prepare Time</th>
+                                <th class="py-2 px-4 border-b border-gray-300 text-left">Servings</th>
+                                <th class="py-2 px-4 border-b border-gray-300 text-left">Actions</th>
                             </tr>
                         </thead>
                         <tbody>
                             @foreach ($recipes as $recipe)
-                                <tr>
-                                    <td>{{ $recipe->recipe_name }}</td>
-                                    <td>{{ $recipe->user->name }} (ID: {{ $recipe->user_id }})</td>
-                                    <td>{{ $recipe->prep_time }} minutes</td>
-                                    <td>{{ $recipe->servings }} people</td>
-                                    <td>
-                                        <a href="{{ route('admin.recipes.show', $recipe) }}" class="text-blue-500">view</a>
+                                <tr class="hover:bg-gray-50">
+                                    <td class="py-2 px-4 border-b border-gray-300">{{ $recipe->recipe_name }}</td>
+                                    <td class="py-2 px-4 border-b border-gray-300">{{ $recipe->user->name }} (ID:
+                                        {{ $recipe->user_id }})</td>
+                                    <td class="py-2 px-4 border-b border-gray-300">{{ $recipe->prep_time }} minutes</td>
+                                    <td class="py-2 px-4 border-b border-gray-300">{{ $recipe->servings }} people</td>
+                                    <td class="py-2 px-4 border-b border-gray-300">
+                                        <a href="{{ route('admin.recipes.show', $recipe) }}"
+                                            class="text-blue-500 hover:underline mr-2">View</a>
                                         <a href="{{ route('admin.recipes.edit', $recipe) }}"
-                                            class="text-yellow-500">edit</a>
-                                        <a href="{{ route('recipes.show', $recipe) }}" class="text-green-500"
-                                            target="_blank">frontend</a>
+                                            class="text-yellow-500 hover:underline mr-2">Edit</a>
+                                        <a href="{{ route('recipes.show', $recipe) }}"
+                                            class="text-green-500 hover:underline mr-2" target="_blank">Frontend</a>
                                         <form action="{{ route('admin.recipes.destroy', $recipe) }}" method="POST"
                                             class="inline">
                                             @csrf
                                             @method('DELETE')
-                                            <button type="submit" class="text-red-500"
-                                                onclick="return confirm('Confirm Delete?')">delete</button>
+                                            <button type="submit" class="text-red-500 hover:underline"
+                                                onclick="return confirm('Are you sure you want to delete this recipe?')">Delete</button>
                                         </form>
                                     </td>
                                 </tr>

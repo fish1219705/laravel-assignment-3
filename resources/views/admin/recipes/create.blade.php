@@ -9,12 +9,13 @@
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 text-gray-900">
-                    <form method="POST" action="{{ route('recipes.store') }}" enctype="multipart/form-data">
+                    <form method="POST" action="{{ route('admin.recipes.store') }}" enctype="multipart/form-data">
                         @csrf
 
                         <div class="mb-4">
                             <label for="recipe_name">Recipe Name:</label>
-                            <input type="text" name="recipe_name" id="recipe_name" class="w-full border-gray-300 rounded" required>
+                            <input type="text" name="recipe_name" id="recipe_name"
+                                class="w-full border-gray-300 rounded" required>
                             @error('recipe_name')
                                 <span class="text-red-600">{{ $message }}</span>
                             @enderror
@@ -22,7 +23,8 @@
 
                         <div class="mb-4">
                             <label for="instructions">Instruction:</label>
-                            <textarea name="instructions" id="instructions" class="w-full border-gray-300 rounded" required></textarea>
+                            <textarea name="instructions" id="instructions" class="w-full border-gray-300 rounded"
+                                required></textarea>
                             @error('instructions')
                                 <span class="text-red-600">{{ $message }}</span>
                             @enderror
@@ -30,7 +32,8 @@
 
                         <div class="mb-4">
                             <label for="prep_time">Prepare Time: (mins)</label>
-                            <input type="number" name="prep_time" id="prep_time" class="w-full border-gray-300 rounded" required>
+                            <input type="number" name="prep_time" id="prep_time" class="w-full border-gray-300 rounded"
+                                required>
                             @error('prep_time')
                                 <span class="text-red-600">{{ $message }}</span>
                             @enderror
@@ -38,7 +41,8 @@
 
                         <div class="mb-4">
                             <label for="servings">Servings:</label>
-                            <input type="number" name="servings" id="servings" class="w-full border-gray-300 rounded" required>
+                            <input type="number" name="servings" id="servings" class="w-full border-gray-300 rounded"
+                                required>
                             @error('servings')
                                 <span class="text-red-600">{{ $message }}</span>
                             @enderror
@@ -55,12 +59,15 @@
                         <div class="mb-4" id="ingredients-container">
                             <label>Ingredient:</label>
                             <div class="ingredient-row flex space-x-4 mb-2">
-                                <input type="text" name="ingredients[0][name]" placeholder="Ingredient Name" class="w-1/2 border-gray-300 rounded" required>
-                                <input type="text" name="ingredients[0][quantity]" placeholder="Quantity" class="w-1/2 border-gray-300 rounded" required>
+                                <input type="text" name="ingredients[0][name]" placeholder="Ingredient Name"
+                                    class="w-1/2 border-gray-300 rounded" required>
+                                <input type="text" name="ingredients[0][quantity]" placeholder="Quantity"
+                                    class="w-1/2 border-gray-300 rounded" required>
                             </div>
                         </div>
 
-                        <button type="button" onclick="addIngredientRow()" class="mb-4 bg-gray-500 text-white px-4 py-2 rounded">
+                        <button type="button" onclick="addIngredientRow()"
+                            class="mb-4 bg-gray-500 text-white px-4 py-2 rounded">
                             Add another ingredient
                         </button>
 

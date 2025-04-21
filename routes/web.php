@@ -55,6 +55,7 @@ Route::middleware('admin')->group(function () {
 
     Route::get('/admin/recipes', [RecipeController::class, 'index'])->name('admin.recipes.index');
     Route::get('/admin/recipes/create', [RecipeController::class, 'create'])->name('admin.recipes.create');
+    Route::post('/admin/recipes', [RecipeController::class, 'store'])->name('admin.recipes.store');
     Route::get('/admin/recipes/{recipe}', [RecipeController::class, 'show'])->name('admin.recipes.show');
     Route::get('/admin/recipes/{recipe}/edit', [RecipeController::class, 'edit'])->name('admin.recipes.edit');
     Route::put('/admin/recipes/{recipe}', [RecipeController::class, 'update'])->name('admin.recipes.update');

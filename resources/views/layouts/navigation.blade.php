@@ -15,6 +15,19 @@
                     <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
                         {{ __('Dashboard') }}
                     </x-nav-link>
+                    
+                    @if (Auth::user() && Auth::user()->is_admin)
+                    <x-nav-link :href="route('admin.recipes.index')" :active="request()->routeIs('admin.recipes.*')">
+                        {{ __('Manage Recipes') }}
+                    </x-nav-link>
+                    <x-nav-link :href="route('admin.users.index')" :active="request()->routeIs('admin.users.*')">
+                        {{ __('Manage Users') }}
+                    </x-nav-link>
+                    @endif
+                    
+                    <x-nav-link :href="route('recipes.my')" :active="request()->routeIs('recipes.my')">
+                        {{ __('My Recipes') }}
+                    </x-nav-link>
                 </div>
             </div>
 
@@ -69,6 +82,19 @@
         <div class="pt-2 pb-3 space-y-1">
             <x-responsive-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
                 {{ __('Dashboard') }}
+            </x-responsive-nav-link>
+            
+            @if (Auth::user() && Auth::user()->is_admin)
+            <x-responsive-nav-link :href="route('admin.recipes.index')" :active="request()->routeIs('admin.recipes.*')">
+                {{ __('Manage Recipes') }}
+            </x-responsive-nav-link>
+            <x-responsive-nav-link :href="route('admin.users.index')" :active="request()->routeIs('admin.users.*')">
+                {{ __('Manage Users') }}
+            </x-responsive-nav-link>
+            @endif
+            
+            <x-responsive-nav-link :href="route('recipes.my')" :active="request()->routeIs('recipes.my')">
+                {{ __('My Recipes') }}
             </x-responsive-nav-link>
         </div>
 

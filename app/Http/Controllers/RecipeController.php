@@ -26,6 +26,12 @@ class RecipeController extends Controller
 
     public function create()
     {
+        // Check if the request is coming from an admin route
+        if (request()->routeIs('admin.recipes.create')) {
+            return view('admin.recipes.create');
+        }
+
+        // For regular users
         return view('recipes.test-create');
     }
 
@@ -63,6 +69,11 @@ class RecipeController extends Controller
                 'ingredient_name' => $ingredientData['name'],
                 'quantity' => $ingredientData['quantity'],
             ]);
+        }
+
+        // Check if the request is coming from admin or user
+        if (request()->routeIs('admin.recipes.store')) {
+            return redirect()->route('admin.recipes.index')->with('success', 'Recipe created successfully!');
         }
 
         return redirect()->route('recipes.my')->with('success', 'Recipe submitted!');
