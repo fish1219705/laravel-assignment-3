@@ -1,9 +1,9 @@
-# 使用 PHP 8.2 作為基底映像
 FROM php:8.2-fpm
 
-# 安裝 Nginx 和必要的擴展
+# 安裝 Nginx、Supervisord 與必要工具
 RUN apt-get update && apt-get install -y \
     nginx \
+    supervisor \
     libpng-dev \
     libjpeg-dev \
     libfreetype6-dev \
@@ -11,24 +11,25 @@ RUN apt-get update && apt-get install -y \
     git
 
 # 安裝 PHP 擴展
-RUN docker-php-ext-configure gd --with-freetype --with-jpeg
-RUN docker-php-ext-install gd pdo pdo_mysql
+RUN docker-php-ext-configure gd --with-freetype --with-jpeg \
+ && docker-php-ext-install gd pdo pdo_mysql
 
 # 安裝 Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
-# 複製 Laravel 專案
+# 設定工作目錄
 WORKDIR /var/www
 COPY . .
 
-# 安裝 Laravel 依賴
-RUN composer install
+# 安裝 Laravel 套件
+RUN composer install --no-dev --optimize-autoloader \
+ && chmod -R 775 storage bootstrap/cache
 
-# 設置 Nginx 配置
+# 複製 Nginx 與 Supervisor 設定
 COPY nginx/default.conf /etc/nginx/conf.d/default.conf
+COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 
-# 開放 HTTP 端口
 EXPOSE 80
 
-# 啟動 Nginx 和 PHP-FPM 伺服器
-CMD service nginx start && php-fpm
+# 使用 Supervisor 同時跑 Nginx 和 PHP-FPM
+CMD ["/usr/bin/supervisord"]
