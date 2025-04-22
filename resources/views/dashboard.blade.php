@@ -13,15 +13,18 @@
 
                     <br><br>
 
-                    <a href="{{ route('recipes.my') }}" class="mt-4 inline-block bg-blue-500 text-white px-4 py-2 rounded">
+                    <a href="{{ route('recipes.my') }}"
+                        class="mt-4 inline-block bg-blue-500 text-white px-4 py-2 rounded">
                         See my recipes
                     </a>
 
                     @if (auth()->user()->is_admin)
-                        <a href="{{ route('admin.recipes.index') }}" class="mt-4 inline-block bg-green-500 text-white px-4 py-2 rounded">
+                        <a href="{{ route('admin.recipes.index') }}"
+                            class="mt-4 inline-block bg-green-500 text-white px-4 py-2 rounded">
                             Manage recipes
                         </a>
-                        <a href="{{ route('admin.users.index') }}" class="mt-4 inline-block bg-purple-500 text-white px-4 py-2 rounded">
+                        <a href="{{ route('admin.users.index') }}"
+                            class="mt-4 inline-block bg-purple-500 text-white px-4 py-2 rounded">
                             Manage Users
                         </a>
                     @endif
